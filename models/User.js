@@ -18,10 +18,10 @@ const userSchema = new mongoose.Schema({
 });
 
 // fire a fuction after doc is saved to db
-userSchema.post('save', function (doc, next) {
-   console.log('new user was created and saved', doc);
-   next();
-});
+// userSchema.post('save', function (doc, next) {
+//    console.log('new user was created and saved', doc);
+//    next();
+// });
 
 // fire a fuction before doc is saved to db
 userSchema.pre('save', async function (next) {
@@ -30,19 +30,18 @@ userSchema.pre('save', async function (next) {
    next();
 });
 
-// Static method to login user
+// static method to login user
 userSchema.statics.login = async function(email, password) {
    const user = await this.findOne({ email });
-
    if (user) {
-      const auth = await bcrypt.compare(password, user.password);
-      if (auth) {
-         return user;
-      }
-      throw Error('incorrect Password')
+     const auth = await bcrypt.compare(password, user.password);
+     if (auth) {
+       return user;
+     }
+     throw Error('incorrect password');
    }
-   throw Error('incorrect Email')
-}
+   throw Error('incorrect email');
+ };
 
 const User = mongoose.model('user', userSchema);
 
